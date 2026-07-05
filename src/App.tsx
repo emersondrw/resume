@@ -55,6 +55,7 @@ const resume = {
 
   experience: [
     {
+      project: "BCP",
       company: "Banco de Crédito del Perú (BCP)",
       location: "Peru",
       role: "Salesforce Developer",
@@ -68,6 +69,7 @@ const resume = {
       ],
     },
     {
+      project: "Clínica Alemana (CAS)",
       company: "Clínica Alemana (CAS)",
       location: "Chile (Remote)",
       role: "Salesforce Developer",
@@ -80,33 +82,63 @@ const resume = {
       ],
     },
     {
+      project: "IDB (Inter-American Development Bank)",
       company: "Globant",
-      location: "Peru / International Projects",
-      role: "Salesforce Developer & Technical Leader",
-      period: "Jun 2019 - Jul 2025",
+      location: "Remote",
+      role: "Salesforce Developer",
+      period: "Apr 2024 - Jul 2025",
       highlights: [
-        "Provided high-tier support and resolved complex technical tickets with direct client interaction entirely in English. (IDB Tower Support, Sept 2024 - Jul 2025)",
-        "Enhanced core Apex functionalities and revamped UI components to improve the end-user experience.",
-        "Developed specialized Apex logic and custom flows for automated legal operations and data management. (IDB Legal Stratus, Apr 2024 - Aug 2024)",
-        "Led and mentored a high-performing team of Salesforce developers, ensuring timely delivery of sprints. (Mercado Libre FPS, Jul 2023 - Apr 2024)",
-        "Spearheaded the automation of complex business logic using Apex and advanced Flow architectures.",
-        "Played a key role in the regional deployment and data migration of Salesforce for the North American rollout. (ME Elecmetal Rollout NA, Mar 2023 - Jun 2023)",
-        "Bridged the gap between business requirements and technical execution; managed Jira ticketing and stakeholder alignment. (Mercado Libre, May 2022 - Dec 2022)",
-        "Automated marketing and operational workflows using Pardot and Flow Builder.",
-        "Developed custom business logic using Aura Components and implemented smart notification systems. (Disney ABC M360, Jul 2019 - Mar 2022)",
+        "Provided high-tier support and resolved complex technical tickets with direct client interaction entirely in English.",
+        "Developed specialized Apex logic and custom flows for automated legal operations and enterprise data management.",
         "Collaborated closely within a fast-paced Scrum team to deliver customized objects, page layouts, and Chatter features.",
       ],
     },
     {
+      project: "Mercado Libre",
+      company: "Globant",
+      location: "Remote",
+      role: "Salesforce Developer & Technical Leader",
+      period: "May 2022 - Apr 2024",
+      highlights: [
+        "Led and mentored a high-performing team of Salesforce developers, ensuring timely delivery of sprints for Latin America's largest e-commerce platform.",
+        "Bridged the gap between business requirements and technical execution; managed Jira ticketing and stakeholder alignment across multiple squads.",
+        "Spearheaded the automation of complex business logic using Apex and advanced Flow architectures for marketplace operations.",
+      ],
+    },
+    {
+      project: "ME Elecmetal",
+      company: "Globant",
+      location: "Remote",
+      role: "Salesforce Developer",
+      period: "Mar 2023 - Jun 2023",
+      highlights: [
+        "Played a key role in the regional deployment and data migration of Salesforce for the North American manufacturing rollout.",
+      ],
+    },
+    {
+      project: "Disney ABC M360",
+      company: "Globant",
+      location: "Remote",
+      role: "Salesforce Developer",
+      period: "Jul 2019 - Mar 2022",
+      highlights: [
+        "Developed custom business logic using Aura Components and implemented real-time notification systems for media operations.",
+        "Enhanced core Apex functionalities and revamped UI components, improving end-user experience for global enterprise workflows.",
+        "Automated marketing and operational workflows using Pardot and Flow Builder, streamlining cross-team campaigns.",
+      ],
+    },
+    {
+      project: "Universidad del Rosario",
       company: "AVANXO",
       location: "Peru",
-      role: "Salesforce Technical Consultant (Universidad del Rosario Project)",
+      role: "Salesforce Technical Consultant",
       period: "Jun 2019 - Jul 2019",
       highlights: [
         "Delivered critical Apex optimization and provided technical mentorship/training to enterprise users.",
       ],
     },
     {
+      project: "CloudCreations - SERTPRO 360",
       company: "CloudCreations - SERTPRO 360",
       location: "Peru",
       role: "Salesforce Developer",
@@ -118,6 +150,7 @@ const resume = {
       ],
     },
     {
+      project: "Various Companies",
       company: "Various Companies",
       location: "",
       role: "Software Analyst / Developer",
@@ -147,6 +180,22 @@ const resume = {
     year: "Graduated (2017)",
   },
 };
+
+function getBadge(name: string): { letter: string; bg: string } {
+  const map: Record<string, { letter: string; bg: string }> = {
+    "BCP": { letter: "B", bg: "bg-blue-600" },
+    "Clínica Alemana (CAS)": { letter: "A", bg: "bg-emerald-600" },
+    "IDB (Inter-American Development Bank)": { letter: "I", bg: "bg-purple-600" },
+    "Mercado Libre": { letter: "M", bg: "bg-amber-500" },
+    "ME Elecmetal": { letter: "E", bg: "bg-slate-600" },
+    "Disney ABC M360": { letter: "D", bg: "bg-pink-600" },
+    "AVANXO": { letter: "V", bg: "bg-indigo-600" },
+    "Universidad del Rosario": { letter: "R", bg: "bg-green-600" },
+    "CloudCreations - SERTPRO 360": { letter: "S", bg: "bg-cyan-600" },
+    "Various Companies": { letter: "M", bg: "bg-gray-600" },
+  }
+  return map[name] || { letter: name.charAt(0).toUpperCase(), bg: "bg-gray-500" }
+}
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -202,22 +251,32 @@ function App() {
         </Section>
 
         <Section title="Professional Experience">
-          {resume.experience.map((exp, i) => (
-            <div key={i} className="mb-6">
-              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline">
-                <div>
-                  <h3 className="text-lg font-bold text-gray-800">{exp.role}</h3>
-                  <p className="text-blue-700 font-medium">{exp.company}{exp.location ? ` | ${exp.location}` : ''}</p>
+          {resume.experience.map((exp, i) => {
+            const badge = getBadge(exp.project)
+            return (
+              <div key={i} className="mb-6 flex items-start gap-3">
+                <div className={`shrink-0 w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-sm mt-0.5 ${badge.bg}`}>
+                  {badge.letter}
                 </div>
-                <span className="text-sm text-gray-500 font-medium whitespace-nowrap mt-1 sm:mt-0">{exp.period}</span>
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline">
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-800">{exp.project}</h3>
+                      <p className="text-blue-700 font-medium">
+                        {exp.role}{exp.project !== exp.company ? ` \u00B7 ${exp.company}` : ''}{exp.location ? ` | ${exp.location}` : ''}
+                      </p>
+                    </div>
+                    <span className="text-sm text-gray-500 font-medium whitespace-nowrap mt-1 sm:mt-0">{exp.period}</span>
+                  </div>
+                  <ul className="list-disc list-inside text-gray-700 text-sm mt-2 space-y-1">
+                    {exp.highlights.map((h, j) => (
+                      <li key={j}>{h}</li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-              <ul className="list-disc list-inside text-gray-700 text-sm mt-2 space-y-1">
-                {exp.highlights.map((h, j) => (
-                  <li key={j}>{h}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
+            )
+          })}
         </Section>
 
         <Section title="Languages">
