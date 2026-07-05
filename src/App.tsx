@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import profilePic from './assets/profile_em.png'
 
 const resume = {
   name: "Emerson Darwin Vásquez Infante",
@@ -275,9 +276,20 @@ function App() {
               <div className="absolute -bottom-16 -left-16 w-48 h-48 rounded-full bg-blue-400/10 blur-3xl" />
               <div className="relative z-10">
                 <AnimatedSection>
-                  <h1 className="text-3xl md:text-5xl font-bold tracking-tight">{resume.name}</h1>
-                  <p className="text-lg md:text-xl text-blue-200 font-medium mt-1.5">{resume.title}</p>
-                  <div className="flex flex-wrap gap-x-5 gap-y-1 mt-4 text-sm text-blue-100">
+                  <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
+                    <div className="shrink-0">
+                      <div className="w-28 h-28 md:w-36 md:h-36 rounded-full border-4 border-white/40 shadow-xl overflow-hidden transition-transform duration-500 hover:scale-105 hover:shadow-2xl hover:border-white/60">
+                        <img
+                          src={profilePic}
+                          alt={resume.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    </div>
+                    <div className="text-center md:text-left">
+                      <h1 className="text-3xl md:text-5xl font-bold tracking-tight">{resume.name}</h1>
+                      <p className="text-lg md:text-xl text-blue-200 font-medium mt-1.5">{resume.title}</p>
+                      <div className="flex flex-wrap justify-center md:justify-start gap-x-5 gap-y-1 mt-4 text-sm text-blue-100">
                     <span className="flex items-center gap-1.5">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                       {resume.location}
@@ -298,6 +310,8 @@ function App() {
                         {link.label}
                       </a>
                     ))}
+                  </div>
+                    </div>
                   </div>
                 </AnimatedSection>
               </div>
