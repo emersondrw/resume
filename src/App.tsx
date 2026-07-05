@@ -241,24 +241,6 @@ function SummaryText({ text }: { text: string }) {
   )
 }
 
-function LangBar({ level, label, delay }: { level: number; label: string; delay: number }) {
-  const { ref, visible } = useScrollReveal()
-  return (
-    <div ref={ref} className="mb-3">
-      <div className="flex justify-between text-sm mb-1">
-        <span className="font-medium text-slate-200">{label}</span>
-        <span className="text-slate-400">{level}%</span>
-      </div>
-      <div className="h-2 rounded-full overflow-hidden bg-slate-700">
-        <div
-          className={`h-full rounded-full bg-gradient-to-r from-blue-400 to-indigo-500 transition-all duration-1000 ease-out`}
-          style={{ width: visible ? `${level}%` : '0%', transitionDelay: `${delay}ms` }}
-        />
-      </div>
-    </div>
-  )
-}
-
 function App() {
   const [dark, setDark] = useState(false)
   const timelineVisible = useScrollReveal()
@@ -346,49 +328,77 @@ function App() {
               </div>
             </header>
 
-            {/* Body: Sidebar + Main */}
+            {/* Body: Two columns */}
             <div className="flex flex-col md:flex-row">
 
-              {/* Sidebar */}
-              <aside className="md:w-72 shrink-0 bg-gradient-to-b from-slate-800 to-slate-900 text-white p-6 md:p-8">
+              {/* Left Column: Skills, Languages, Certs, Education */}
+              <div className="md:w-[280px] shrink-0 p-6 md:p-8 border-r border-slate-200 dark:border-slate-700">
                 <div className="space-y-8">
 
-                  {/* Languages */}
-                  <AnimatedSection delay={200}>
-                    <SectionTitleSidebar>Languages</SectionTitleSidebar>
-                    {resume.languages.map((lang, i) => (
-                      <LangBar key={i} level={lang.level} label={lang.name} delay={i * 150} />
+                  {/* Skills */}
+                  <AnimatedSection>
+                    <SectionTitleLight>Core Skills</SectionTitleLight>
+                    {resume.skills.map((group) => (
+                      <div key={group.category} className="mb-4">
+                        <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">{group.category}</h4>
+                        <div className="flex flex-wrap">
+                          {group.items.map((item, i) => (
+                            <SkillBadge key={i} name={item} color={group.color} />
+                          ))}
+                        </div>
+                      </div>
                     ))}
                   </AnimatedSection>
 
+                  {/* Languages */}
+                  <AnimatedSection delay={100}>
+                    <SectionTitleLight>Languages</SectionTitleLight>
+                    {resume.languages.map((lang, i) => {
+                      const lvl = typeof lang.level === 'number' ? lang.level : 90
+                      return (
+                        <div key={i} className="mb-3">
+                          <div className="flex justify-between text-sm mb-1">
+                            <span className="font-medium text-slate-700 dark:text-slate-200">{lang.name}</span>
+                            <span className="text-slate-400">{lang.label}</span>
+                          </div>
+                          <div className="h-2 rounded-full overflow-hidden bg-slate-200 dark:bg-slate-600">
+                            <div className={`h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-all duration-1000 ease-out`}
+                              style={{ width: `${lvl}%` }}
+                            />
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </AnimatedSection>
+
                   {/* Certifications */}
-                  <AnimatedSection delay={300}>
-                    <SectionTitleSidebar>Certifications</SectionTitleSidebar>
+                  <AnimatedSection delay={200}>
+                    <SectionTitleLight>Certifications</SectionTitleLight>
                     <div className="space-y-2">
                       {resume.certifications.map((cert, i) => (
                         <div key={i} className="flex items-start gap-2 text-sm">
-                          <span className="text-blue-400 mt-0.5 shrink-0">🏅</span>
-                          <span className="text-slate-300">{cert}</span>
+                          <span className="text-blue-500 mt-0.5 shrink-0">🏅</span>
+                          <span className="text-slate-600 dark:text-slate-300">{cert}</span>
                         </div>
                       ))}
                     </div>
                   </AnimatedSection>
 
                   {/* Education */}
-                  <AnimatedSection delay={400}>
-                    <SectionTitleSidebar>Education</SectionTitleSidebar>
+                  <AnimatedSection delay={300}>
+                    <SectionTitleLight>Education</SectionTitleLight>
                     <div>
-                      <h3 className="font-semibold text-white text-sm">{resume.education.degree}</h3>
-                      <p className="text-sm text-blue-300 mt-0.5">{resume.education.institution}</p>
-                      <p className="text-xs text-slate-400 mt-1">{resume.education.location} · {resume.education.year}</p>
+                      <h3 className="font-semibold text-slate-800 dark:text-slate-100 text-sm">{resume.education.degree}</h3>
+                      <p className="text-sm text-blue-600 dark:text-blue-400 mt-0.5">{resume.education.institution}</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{resume.education.location} · {resume.education.year}</p>
                     </div>
                   </AnimatedSection>
 
                 </div>
-              </aside>
+              </div>
 
-              {/* Main Content */}
-              <main className="flex-1 bg-white dark:bg-slate-800 p-6 md:p-8 transition-colors duration-500">
+              {/* Right Column: Summary + Experience */}
+              <div className="flex-1 p-6 md:p-8">
 
                 {/* Summary */}
                 <AnimatedSection>
@@ -397,26 +407,6 @@ function App() {
                     Professional Summary
                   </h2>
                   <SummaryText text={resume.summary} />
-                </AnimatedSection>
-
-                <div className="my-8 border-t border-slate-200 dark:border-slate-600" />
-
-                {/* Skills */}
-                <AnimatedSection delay={100}>
-                  <h2 className="text-lg font-bold uppercase tracking-wider mb-4 flex items-center gap-2 text-slate-800 dark:text-slate-100">
-                    <span className="w-1 h-5 bg-gradient-to-b from-blue-500 to-indigo-500 rounded-full inline-block" />
-                    Core Skills
-                  </h2>
-                  {resume.skills.map((group) => (
-                    <div key={group.category} className="mb-4">
-                      <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">{group.category}</h3>
-                      <div className="flex flex-wrap">
-                        {group.items.map((item, i) => (
-                          <SkillBadge key={i} name={item} color={group.color} />
-                        ))}
-                      </div>
-                    </div>
-                  ))}
                 </AnimatedSection>
 
                 <div className="my-8 border-t border-slate-200 dark:border-slate-600" />
@@ -480,7 +470,7 @@ function App() {
                   </div>
                 </section>
 
-              </main>
+              </div>
             </div>
 
           </div>
@@ -490,9 +480,9 @@ function App() {
   )
 }
 
-function SectionTitleSidebar({ children }: { children: React.ReactNode }) {
+function SectionTitleLight({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="text-sm font-bold uppercase tracking-wider mb-3 flex items-center gap-2 text-white/90">
+    <h3 className="text-sm font-bold uppercase tracking-wider mb-3 flex items-center gap-2 text-slate-800 dark:text-slate-100">
       <span className="w-1 h-4 bg-blue-500 rounded-full inline-block" />
       {children}
     </h3>
