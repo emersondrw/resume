@@ -8,7 +8,7 @@ const resume = {
   phone: "+51 938561506",
   email: "emersondrw.evsi@gmail.com",
   links: [
-    { label: "LinkedIn Profile", url: "#" },
+    { label: "LinkedIn Profile", url: "https://www.linkedin.com/in/emerson-darwin-v%C3%A1squez-infante-49142b173" },
     { label: "Digital Portfolio", url: "#" },
   ],
   summary:
@@ -212,6 +212,35 @@ function SkillBadge({ name, color }: { name: string; color: string }) {
   )
 }
 
+function SummaryText({ text }: { text: string }) {
+  const keywords = [
+    "Senior Salesforce Developer",
+    "enterprise solutions",
+    "technical leadership",
+    "cross-functional collaboration",
+    "Agile/Scrum environments",
+    "CI/CD pipelines",
+    "Salesforce ecosystem",
+    "global clients",
+    "high-impact",
+    "LWC",
+    "Apex",
+    "Advanced Flows",
+  ]
+  const esc = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const regex = new RegExp(`(${keywords.map(esc).join('|')})`, 'gi')
+  const parts = text.split(regex)
+  return (
+    <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300 text-justify">
+      {parts.map((part, i) =>
+        keywords.some((k) => k.toLowerCase() === part.toLowerCase())
+          ? <strong key={i} className="text-slate-900 dark:text-white font-semibold">{part}</strong>
+          : <span key={i}>{part}</span>
+      )}
+    </p>
+  )
+}
+
 function LangBar({ level, label, delay }: { level: number; label: string; delay: number }) {
   const { ref, visible } = useScrollReveal()
   return (
@@ -324,27 +353,6 @@ function App() {
               <aside className="md:w-72 shrink-0 bg-gradient-to-b from-slate-800 to-slate-900 text-white p-6 md:p-8">
                 <div className="space-y-8">
 
-                  {/* Summary */}
-                  <AnimatedSection>
-                    <SectionTitleSidebar>Professional Summary</SectionTitleSidebar>
-                    <p className="text-sm leading-relaxed text-slate-300">{resume.summary}</p>
-                  </AnimatedSection>
-
-                  {/* Skills */}
-                  <AnimatedSection delay={100}>
-                    <SectionTitleSidebar>Core Skills</SectionTitleSidebar>
-                    {resume.skills.map((group) => (
-                      <div key={group.category} className="mb-4">
-                        <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">{group.category}</h4>
-                        <div className="flex flex-wrap">
-                          {group.items.map((item, i) => (
-                            <SkillBadge key={i} name={item} color={group.color} />
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </AnimatedSection>
-
                   {/* Languages */}
                   <AnimatedSection delay={200}>
                     <SectionTitleSidebar>Languages</SectionTitleSidebar>
@@ -381,6 +389,37 @@ function App() {
 
               {/* Main Content */}
               <main className="flex-1 bg-white dark:bg-slate-800 p-6 md:p-8 transition-colors duration-500">
+
+                {/* Summary */}
+                <AnimatedSection>
+                  <h2 className="text-lg font-bold uppercase tracking-wider mb-3 flex items-center gap-2 text-slate-800 dark:text-slate-100">
+                    <span className="w-1 h-5 bg-gradient-to-b from-blue-500 to-indigo-500 rounded-full inline-block" />
+                    Professional Summary
+                  </h2>
+                  <SummaryText text={resume.summary} />
+                </AnimatedSection>
+
+                <div className="my-8 border-t border-slate-200 dark:border-slate-600" />
+
+                {/* Skills */}
+                <AnimatedSection delay={100}>
+                  <h2 className="text-lg font-bold uppercase tracking-wider mb-4 flex items-center gap-2 text-slate-800 dark:text-slate-100">
+                    <span className="w-1 h-5 bg-gradient-to-b from-blue-500 to-indigo-500 rounded-full inline-block" />
+                    Core Skills
+                  </h2>
+                  {resume.skills.map((group) => (
+                    <div key={group.category} className="mb-4">
+                      <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">{group.category}</h3>
+                      <div className="flex flex-wrap">
+                        {group.items.map((item, i) => (
+                          <SkillBadge key={i} name={item} color={group.color} />
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </AnimatedSection>
+
+                <div className="my-8 border-t border-slate-200 dark:border-slate-600" />
 
                 {/* Experience */}
                 <section ref={timelineVisible.ref}>
