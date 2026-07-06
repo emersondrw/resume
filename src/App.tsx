@@ -332,7 +332,7 @@ function App() {
             <div className="flex flex-col md:flex-row">
 
               {/* Left Column: Skills, Languages, Certs, Education */}
-              <div className="md:w-96 shrink-0 p-6 md:p-8 border-r border-slate-200 dark:border-slate-700">
+              <div className="md:w-[332px] shrink-0 p-6 md:p-8 border-r border-slate-200 dark:border-slate-700">
                 <div className="space-y-8">
 
                   {/* Skills */}
