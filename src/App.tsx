@@ -143,8 +143,8 @@ const resume = {
   ],
 
   education: {
-    institution: "Universidad Señor de Sipón",
-    location: "Peru",
+    institution: "Universidad Señor de Sipán",
+    location: "Perú",
     degree: "Bachelor of Science in Systems Engineering",
     year: "Graduated (2017)",
   },
